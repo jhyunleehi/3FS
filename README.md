@@ -60,9 +60,9 @@ When `deepseek-ai/3fs` has been cloned to a local file system, run the
 following commands to check out the submodules:
 
 ```bash
-cd 3fs
-git submodule update --init --recursive
-./patches/apply.sh
+$ cd 3fs
+$ git submodule update --init --recursive
+$ ./patches/apply.sh
 ```
 
 ## Install dependencies
@@ -143,6 +143,57 @@ $ wget --no-check-certificate  https://github.com/apple/foundationdb/releases/do
 $ sudo dpkg -i  foundationdb-clients_6.3.23-1_amd64.deb foundationdb-server_6.3.23-1_amd64.deb
 
 ```
+### 3. Fuse 3.16
+```sh
+$ wget --no-check-certificate https://github.com/libfuse/libfuse/releases/download/fuse-3.16.1/fuse-3.16.1.tar.gz
+$ gunzip fuse-3.16.1.tar.gz
+$ tar xvf gunzip fuse-3.16.1.tar.gz
+$ sudo apt install -y meson ninja-build pkg-config libfuse3-dev
+$ meson setup build
+$ meson setup --wipe build   #<-- remove
+$ meson setup --reconfigure  build  #<-- rebuild
+$ cd build
+$ ninja 
+$ sudo ninja install 
+$ fusermount3 --version 
+$ lsmod  | grep fuse
+$ sudo usermod -aG fuse $(whoami)
+$ newgrp fuse
+```
+* fuse github
+```sh
+$ sudo apt update
+$ sudo apt install -y meson ninja-build pkg-config libfuse3-dev
+$ git clone https://github.com/libfuse/libfuse.git
+$ cd libfuse
+$ meson setup build
+$ cd build
+$ ninja
+$ sudo ninja install
+$ fusermount3 --version
+$ lsmod | grep fuse
+$ sudo usermod -aG fuse $(whoami)
+$ newgrp fuse
+```
+#### 1. meson
+Meson : Meson은 고속 빌드 시스템으로, 소프트웨어 프로젝트를 구성하고 빌드하는 도구입니다.
+* 빠르고 효율적: 기존의 autotools나 CMake보다 빌드 속도가 빠름
+* 간단한 문법: meson.build라는 설정 파일을 사용하여 프로젝트를 쉽게 정의 가능
+* 다양한 언어 지원: C, C++, Rust, Python 등 여러 언어 지원
+* Ninja 기반 빌드: 기본적으로 Ninja 빌드 시스템을 사용하여 컴파일
+#### 2. Ninja
+Ninja는 경량 빌드 시스템으로, Meson과 같은 빌드 도구가 생성한 빌드 파일을 실행하는 역할을 합니다.
+* 속도가 빠름: Make보다 훨씬 빠르게 실행됨
+* 간단한 빌드 파일: Meson, CMake 등의 빌드 시스템이 자동으로 Ninja 빌드 파일을 생성
+* 병렬 빌드 지원: 멀티코어 CPU를 활용하여 빠른 컴파일 가능
+
+
+Checking whether type "struct stat" has member "st_atimespec" : NO 
+Library iconv found: NO
+Found Pkg-config: NO
+Run-time dependency udev found: NO (tried pkgconfig and cmake)
+
+
 
 ## Build 3FS
 
