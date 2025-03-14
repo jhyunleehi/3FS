@@ -193,6 +193,11 @@ $ cmake --build build -j 16
 $ cmake --build build -j 16  -v 2>&1 | tee build.log
 ```
 
+### cmake
+```sh
+$ cmake --build build -j 16 -v 2&1  | tee build.log
+$ cmake --build build -j 16 -v -t hf3fs_common_shared
+```
 ## Run a test cluster
 
 Follow instructions in [setup guide](deploy/README.md) to run a test cluster.
