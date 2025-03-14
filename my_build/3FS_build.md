@@ -1,19 +1,5 @@
 #  Fire-Flyer File System
 
-The Fire-Flyer File System (3FS) is a high-performance distributed file system designed to address the challenges of AI training and inference workloads. It leverages modern SSDs and RDMA networks to provide a shared storage layer that simplifies development of distributed applications. Key features and benefits of 3FS include:
-
-- Performance and Usability
-  - **Disaggregated Architecture** 
-  - **Strong Consistency** Implements Chain Replication with Apportioned Queries (CRAQ) 
-  - **File Interfaces** 
-
-- Diverse Workloads
-  - **Data Preparation** 
-  - **Dataloaders** 
-  - **Checkpointing** 
-  - **KVCache for Inference** 
-
-
 ## Check out source code
 
 Clone 3FS repository from GitHub:
@@ -40,7 +26,7 @@ apt install cmake libuv1-dev liblz4-dev liblzma-dev libdouble-conversion-dev lib
   libgoogle-perftools-dev google-perftools libssl-dev libclang-rt-14-dev gcc-10 g++-10 libboost1.71-all-dev
 
 # for Ubuntu 22.04.
-apt install cmake libuv1-dev liblz4-dev liblzma-dev libdouble-conversion-dev libdwarf-dev libunwind-dev \
+$ sudo  apt install cmake libuv1-dev liblz4-dev liblzma-dev libdouble-conversion-dev libdwarf-dev libunwind-dev \
   libaio-dev libgflags-dev libgoogle-glog-dev libgtest-dev libgmock-dev clang-format-14 clang-14 clang-tidy-14 lld-14 \
   libgoogle-perftools-dev google-perftools libssl-dev gcc-12 g++-12 libboost-all-dev
 
@@ -140,6 +126,10 @@ $ rustc --version
 ### 2. FoundationDb
 * download & install  
 ```sh
+$ wget --no-check-certificate  https://github.com/apple/foundationdb/releases/download/7.1.67/foundationdb-clients_7.1.67-1_amd64.deb
+$ wget --no-check-certificate  https://github.com/apple/foundationdb/releases/download/7.1.67/foundationdb-server_7.1.67-1_amd64.deb
+$ sudo dpkg -i foundationdb-clients_7.1.67-1_amd64.deb  foundationdb-server_7.1.67-1_amd64.deb
+
 $ wget --no-check-certificate  https://github.com/apple/foundationdb/releases/download/6.3.23/foundationdb-clients_6.3.23-1_amd64.deb
 $ wget --no-check-certificate  https://github.com/apple/foundationdb/releases/download/6.3.23/foundationdb-server_6.3.23-1_amd64.deb
 $ sudo dpkg -i  foundationdb-clients_6.3.23-1_amd64.deb foundationdb-server_6.3.23-1_amd64.deb
@@ -149,7 +139,7 @@ $ sudo dpkg -i  foundationdb-clients_6.3.23-1_amd64.deb foundationdb-server_6.3.
 ```sh
 $ wget --no-check-certificate https://github.com/libfuse/libfuse/releases/download/fuse-3.16.1/fuse-3.16.1.tar.gz
 $ gunzip fuse-3.16.1.tar.gz
-$ tar xvf gunzip fuse-3.16.1.tar
+$ tar xvf  fuse-3.16.1.tar
 $ sudo apt install -y meson ninja-build pkg-config libfuse3-dev
 $ meson setup build
 $ meson setup --wipe build   #<-- remove
@@ -202,8 +192,163 @@ Run-time dependency udev found: NO (tried pkgconfig and cmake)
 * Build 3FS in `build` folder:
 ```sh
 $ cmake -S . -B build -DCMAKE_CXX_COMPILER=clang++-14 -DCMAKE_C_COMPILER=clang-14 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-$ cmake --build build -j 32
+$ cmake --build build -j 16  
+$ cmake --build build -j 16  -v 2>&1 | tee build.log
 ```
+
+### cmake 디버깅 모드 동작 
+```sh
+$ cmake -S . -B build -DCMAKE_CXX_COMPILER=clang++-14 -DCMAKE_C_COMPILER=clang-14 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_VERBOSE_MAKEFILE=ON
+$ cmake --build build -j 16 -v 2>&1  | tee build_1.log
+
+$ cmake --build build -j 16 -v -t hf3fs_common_shared
+```
+
+### make help
+```sh
+jhyunlee@happy:~/3fs/build$ make help
+The following are some of the valid targets for this Makefile:
+... all (the default if no target is provided)
+... clean
+... depend
+... edit_cache
+... install
+... install/local
+... install/strip
+... list_install_components
+... rebuild_cache
+... test
+... AlwaysCheckGit
+... Hf3fsJemalloc_project
+... apache-arrow-cpp
+... cargo_build_all
+... check-format
+... clang-tidy
+... clang-tidy-fix
+... clean-all
+... core_tools
+... dump-config
+... fdb_loopback
+... format
+... mimalloc-obj-target
+... uninstall
+... unzstd
+... unzstd.1
+... zstd.1
+... zstdcat
+... zstdcat.1
+... zstdgrep.1
+... zstdless.1
+... zstdmt
+... 3fs_liburing
+... MonitorCollectorService-fbs
+... absl-lib
+... admin-cli
+... admin-commands
+... admin_cli
+... analytics
+... block_cache_trace_analyzer_tool
+... chunk_engine
+... cityhash-lib
+... clickhouse-cpp-lib
+... clickhouse-cpp-lib-static
+... client-lib-common
+... common
+... common-cli
+... core-app
+... core-client
+... core-service
+... core-service-fbs
+... core-stub
+... core-user
+... core-user-fbs
+... fdb
+... fmt
+... folly
+... folly_base
+... folly_exception_counter
+... folly_exception_tracer
+... folly_exception_tracer_base
+... folly_test_util
+... follybenchmark
+... gmock
+... gmock_main
+... gtest
+... gtest_main
+... hf3fs-admin
+... hf3fs_api
+... hf3fs_api_shared
+... hf3fs_common_shared
+... hf3fs_fuse
+... hf3fs_fuse_main
+... hf3fs_py_usrbio
+... kv
+... ldb
+... leveldb
+... leveldb_logger
+... leveldbutil
+... libzstd_shared
+... libzstd_static
+... logging_example
+... logging_example_lib
+... lz4-lib
+... memory-common
+... meta
+... meta-client
+... meta-fbs
+... meta-stub
+... meta_main
+... mgmtd
+... mgmtd-client
+... mgmtd-fbs
+... mgmtd-stub
+... mgmtd-test-helper
+... mgmtd_main
+... migration
+... migration-fbs
+... migration_main
+... mimalloc
+... mimalloc-obj
+... mimalloc-static
+... mimalloc-test-api
+... mimalloc-test-api-fill
+... mimalloc-test-stress
+... monitor_collector
+... monitor_collector_main
+... rocksdb
+... rocksdb-shared
+... scn
+... simple_example
+... simple_example-fbs
+... simple_example_main
+... sst_dump
+... storage
+... storage-client
+... storage-fbs
+... storage_bench
+... storage_main
+... stubs-common
+... test-fabric-lib
+... test_analytics
+... test_client
+... test_common
+... test_kv
+... test_main
+... test_meta
+... test_mgmtd
+... test_migration
+... test_storage
+... test_storage_client
+... test_storage_service
+... test_storage_store
+... test_storage_sync
+... trace_analyzer
+... version-info
+... zstd
+... zstd-frugal
+```
+
+
 
 ## Run a test cluster
 
