@@ -135,6 +135,47 @@ $ rustc --version
 $ curl -L https://github.com/rust-lang/rustup/archive/refs/tags/1.26.0.tar.gz -o rustup.tar.gz
 ```
 
+#### rust 에러 조치 방법
+* 에러 현상
+```노
+Rustup이 http://static.rust-lang.org/dist/channel-rust-stable.toml.sha256 파일을 다운로드하는 과정에서 TLS 인증서 오류(Invalid Peer Certificate: BadSignature)가 발생한 것입니다.
+```
+
+* ssh 접근 테스트 해보기 
+```sh
+$ curl -v https://static.rust-lang.org/dist/channel-rust-stable.toml.sha256
+=> 출력 결과에서 "certificate verification failed" 같은 오류가 나타나면 네트워크 문제입니다. 
+=> 이러면 수작업으로 파일 받아서 설치 해야 한다. 
+```
+
+* 임시로 https 인증서 검증을 강제 비활성화
+```sh
+export RUSTUP_USE_HYPER=1
+export CARGO_HTTP_CAINFO=
+export CARGO_HTTP_CHECK_REVOKE=false
+rustup update
+```
+* 사설 인증서 설치
+```sh
+sudo apt update && sudo apt install --reinstall ca-certificates
+```
+* 직접설치
+```sh
+$ curl -O https://sh.rustup.rs
+$ sh rustup-init.sh --no-modify-path
+$ source $HOME/.cargo/env
+
+$ export RUSTUP_DIST_SERVER=https://static.rust-lang.org
+$ export RUSTUP_UPDATE_ROOT=https://static.rust-lang.org/rustup
+
+$ rustup default stable
+$ rustup update
+$ rustup --version
+$ cargo --version
+$ rustc --version
+```
+
+
 ### 2. FoundationDb
 * download & install  
 ```sh
