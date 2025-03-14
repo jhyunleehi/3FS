@@ -1,7 +1,5 @@
 #  Fire-Flyer File System
 
-
-
 The Fire-Flyer File System (3FS) is a high-performance distributed file system designed to address the challenges of AI training and inference workloads. It leverages modern SSDs and RDMA networks to provide a shared storage layer that simplifies development of distributed applications. Key features and benefits of 3FS include:
 
 - Performance and Usability
