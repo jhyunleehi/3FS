@@ -92,12 +92,65 @@ Install other build prerequisites:
 - [FoundationDB](https://apple.github.io/foundationdb/getting-started-linux.html) 7.1 or newer version
 - [Rust](https://www.rust-lang.org/tools/install) toolchain: minimal 1.75.0, recommended 1.85.0 or newer version (latest stable version) 
 
+## Install prerequisites:
+### 1. Rust 
+#### sslVerify 
+```sh
+$ sudo apt install curl wget 
+$ git config --global http.sslVerify false
+$ git config --global --get http.sslVerify
+
+$ cat ~/.wgetrc
+check-certificate=off
+
+$ cat ~/.curlrc
+insecure
+```
+#### 인증서 update
+```sh
+$ sudo apt update && sudo apt install --reinstall ca-certificates
+```
+
+#### Rust
+```sh
+$ curl --insecure --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+$ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+* 수동설치 
+$ wget --no-check-certificate https://sh.rustup.rs -O rustup.init.w.sh
+$ sh rustup-init.sh 
+
+$ curl --insecure https://sh.rustup.rs  -sSf > rustup.init.c.sh
+```
+```sh
+$ . "$HOME/.cargo/env"   
+$ rustup update
+$ rustup --version
+$ cargo --version
+$ rustc --version
+```
+
+#### Rust 수동 설치 
+```sh
+$ curl -L https://github.com/rust-lang/rustup/archive/refs/tags/1.26.0.tar.gz -o rustup.tar.gz
+```
+
+### 2. FoundationDb
+* download & install  
+```sh
+$ wget --no-check-certificate  https://github.com/apple/foundationdb/releases/download/6.3.23/foundationdb-clients_6.3.23-1_amd64.deb
+$ wget --no-check-certificate  https://github.com/apple/foundationdb/releases/download/6.3.23/foundationdb-server_6.3.23-1_amd64.deb
+$ sudo dpkg -i  foundationdb-clients_6.3.23-1_amd64.deb foundationdb-server_6.3.23-1_amd64.deb
+
+```
+
 ## Build 3FS
 
-Build 3FS in `build` folder:
-
-    cmake -S . -B build -DCMAKE_CXX_COMPILER=clang++-14 -DCMAKE_C_COMPILER=clang-14 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-    cmake --build build -j 32
+* Build 3FS in `build` folder:
+```sh
+$ cmake -S . -B build -DCMAKE_CXX_COMPILER=clang++-14 -DCMAKE_C_COMPILER=clang-14 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+$ cmake --build build -j 32
+```
 
 ## Run a test cluster
 
