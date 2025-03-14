@@ -160,13 +160,14 @@ rustup update
 sudo apt update && sudo apt install --reinstall ca-certificates
 ```
 * 직접설치
+=> 도저히 안되면 https를 http로 수정해서 진행한다. ㅎㅎ
 ```sh
 $ curl -O https://sh.rustup.rs
 $ sh rustup-init.sh --no-modify-path
 $ source $HOME/.cargo/env
 
-$ export RUSTUP_DIST_SERVER=https://static.rust-lang.org
-$ export RUSTUP_UPDATE_ROOT=https://static.rust-lang.org/rustup
+$ export RUSTUP_DIST_SERVER=http://static.rust-lang.org
+$ export RUSTUP_UPDATE_ROOT=http://static.rust-lang.org/rustup
 
 $ rustup default stable
 $ rustup update
@@ -188,7 +189,7 @@ $ sudo dpkg -i  foundationdb-clients_6.3.23-1_amd64.deb foundationdb-server_6.3.
 ```sh
 $ wget --no-check-certificate https://github.com/libfuse/libfuse/releases/download/fuse-3.16.1/fuse-3.16.1.tar.gz
 $ gunzip fuse-3.16.1.tar.gz
-$ tar xvf gunzip fuse-3.16.1.tar.gz
+$ tar xvf gunzip fuse-3.16.1.tar
 $ sudo apt install -y meson ninja-build pkg-config libfuse3-dev
 $ meson setup build
 $ meson setup --wipe build   #<-- remove
