@@ -189,7 +189,8 @@ Run-time dependency udev found: NO (tried pkgconfig and cmake)
 * Build 3FS in `build` folder:
 ```sh
 $ cmake -S . -B build -DCMAKE_CXX_COMPILER=clang++-14 -DCMAKE_C_COMPILER=clang-14 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-$ cmake --build build -j 32
+$ cmake --build build -j 16  
+$ cmake --build build -j 16  2>&1 | tee build.log
 ```
 
 ## Run a test cluster
