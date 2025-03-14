@@ -1,3 +1,110 @@
+# cmake
+
+## **CMake란?**  
+CMake는 크로스 플랫폼 빌드 시스템을 생성하는 도구로, 소스 코드에서 플랫폼에 맞는 빌드 파일(예: Makefile, Ninja, Visual Studio 프로젝트 등)을 자동으로 생성하는 역할을 합니다.  
+
+### **CMake의 주요 특징**  
+- **크로스 플랫폼**: Windows, Linux, macOS 등 다양한 운영 체제에서 지원  
+- **다양한 빌드 시스템 지원**: Make, Ninja, Visual Studio 등 다양한 빌드 시스템을 생성 가능  
+- **간단한 설정 파일 (`CMakeLists.txt`)**: 프로젝트의 빌드 과정을 쉽게 정의  
+- **의존성 관리**: 외부 라이브러리와의 연동이 쉬움  
+
+---
+
+## **CMake 사용 예제**  
+
+### **1. 간단한 C++ 프로젝트 빌드**
+#### **프로젝트 구조**
+```plaintext
+my_project/
+│── CMakeLists.txt
+│── src/
+│   ├── main.cpp
+│   ├── math.cpp
+│   └── math.h
+└── build/  (CMake 빌드 디렉토리)
+```
+
+#### **소스 코드 (`src/main.cpp`)**
+```cpp
+#include <iostream>
+#include "math.h"
+
+int main() {
+    int a = 5, b = 3;
+    std::cout << "Sum: " << add(a, b) << std::endl;
+    return 0;
+}
+```
+
+#### **헤더 파일 (`src/math.h`)**
+```cpp
+#ifndef MATH_H
+#define MATH_H
+
+int add(int a, int b);
+
+#endif
+```
+
+#### **소스 코드 (`src/math.cpp`)**
+```cpp
+#include "math.h"
+
+int add(int a, int b) {
+    return a + b;
+}
+```
+
+#### **CMake 설정 파일 (`CMakeLists.txt`)**
+```cmake
+cmake_minimum_required(VERSION 3.10)
+project(MyProject)
+
+# 실행 파일을 만들고 소스 파일 추가
+add_executable(my_program src/main.cpp src/math.cpp)
+```
+
+---
+
+## **2. 빌드 과정**
+### **1) CMake 실행 및 빌드**
+```sh
+mkdir build
+cd build
+cmake ..
+make
+```
+### **2) 실행**
+```sh
+./my_program
+```
+출력:
+```plaintext
+Sum: 8
+```
+
+---
+
+## **CMake 추가 기능 예시**
+### **1. 특정 C++ 버전 사용**
+```cmake
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+```
+
+### **2. 라이브러리 추가 (`math`를 별도 라이브러리로 분리)**
+```cmake
+add_library(math_lib src/math.cpp)
+target_include_directories(math_lib PUBLIC src)
+target_link_libraries(my_program PRIVATE math_lib)
+```
+
+---
+
+이제 CMake를 활용하여 더 복잡한 프로젝트도 쉽게 관리할 수 있습니다! 😊
+
+
 
 # make 단계 발생하는 오류 
 `[Makefile:146: all] Error 2` 오류는 `make` 실행 중에 발생한 문제로, 보통 빌드 과정에서 특정 명령이 실패했을 때 나타납니다. 이 오류의 원인을 찾기 위해 다음과 같은 방법으로 문제를 진단할 수 있습니다.  
